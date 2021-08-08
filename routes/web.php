@@ -30,6 +30,6 @@ Route::prefix('painel')->group(function() {
     Route::get('/login', [App\Http\Controllers\Auth\LoginController::class, 'login'])->name('login');
     Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'loginAction']);
     Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout']);
-    Route::resource('/grupo-portfolio', Admin\PortfolioGroupController::class)->except(['show', 'store', 'edit', 'delete']);
-    Route::resource('/portfolio', Admin\PortfolioController::class)->except(['show', 'store', 'edit', 'delete']);
+    Route::resource('/grupo-portfolio', Admin\PortfolioGroupController::class)->except('show');
+    Route::resource('/portfolio', Admin\PortfolioController::class)->except('show');
 });

@@ -9,4 +9,12 @@ use App\Models\PortfolioGroup;
 class Portfolio extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'title',
+        'active',
+        'short_description',
+        'url',
+        'image'
+    ];
 }

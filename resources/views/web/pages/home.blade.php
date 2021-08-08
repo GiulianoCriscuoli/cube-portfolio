@@ -5,5 +5,4 @@
 
 @section('content')
 
-olá
 @endsection

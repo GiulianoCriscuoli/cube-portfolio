@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\PortfolioGroup;
+use App\Http\Requests\PortfolioGroupRequest;
+use PDOException;
 
 class PortfolioGroupController extends Controller
 {
@@ -14,7 +17,10 @@ class PortfolioGroupController extends Controller
      */
     public function index()
     {
-        return view('admin.group-portfolio.index');
+
+        $portfoliosGroups = PortfolioGroup::where('active', true)->get();
+
+        return view('admin.group-portfolio.index', compact('portfoliosGroups'));
     }
 
     /**
@@ -24,7 +30,7 @@ class PortfolioGroupController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.group-portfolio.create');
     }
 
     /**
@@ -33,9 +39,34 @@ class PortfolioGroupController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PortfolioGroupRequest $request)
     {
-        //
+
+        $data = $request->all();
+
+        if(!isset($data)) {
+            
+            return redirect()
+                ->back()
+                ->withErrors($data);
+        } else {
+
+            try {
+
+                $data['active'] = $request->has('active');
+
+                PortfolioGroup::create($data);
+                
+                return redirect('/painel/grupo-portfolio')
+                    ->with('success', 'Grupo de portfólio criado com sucesso!');
+
+            } catch(\Exception $ex) {
+
+                echo $ex->getMessage();
+
+                return redirect()->back();
+            }
+        }
     }
 
     /**
@@ -55,9 +86,11 @@ class PortfolioGroupController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($grupo_portfolio)
     {
-        //
+        $portfolioGroup = PortfolioGroup::findOrfail($grupo_portfolio)->first();
+
+        return view('admin.group-portfolio.edit', compact('portfolioGroup'));
     }
 
     /**
@@ -67,9 +100,18 @@ class PortfolioGroupController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PortfolioGroupRequest $request, $grupo_portfolio)
     {
-        //
+        $data = $request->all();
+
+        $portfolioGroup = PortfolioGroup::findOrfail($grupo_portfolio);
+
+        if($portfolioGroup) {
+
+            $portfolioGroup->update($data);
+
+            return redirect('/painel/grupo-portfolio')->with('success', 'Grupo de portfólio editado com sucesso!');
+        }
     }
 
     /**
@@ -78,8 +120,15 @@ class PortfolioGroupController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
+    public function destroy($grupo_portfolio)
+    {  
+        $portfolioGroup = PortfolioGroup::findOrFail($grupo_portfolio);
+
+        if($portfolioGroup) {
+
+            $portfolioGroup->delete($grupo_portfolio);
+
+            return redirect('/painel/grupo-portfolio')->with('success', 'Grupo de portfólio deletado com sucesso!');
+        }
     }
 }
