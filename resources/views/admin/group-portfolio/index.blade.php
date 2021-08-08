@@ -30,10 +30,11 @@
     <tbody>
         @if ($portfoliosGroups)
             @foreach ($portfoliosGroups as $gp)
-                <tr>
+                <tr style="background-color: {{  $gp->active == false ? '#990000;' : 'unset;' }}
+                    color: {{  $gp->active == false ? '#FFFFFF;' : '#000;' }} ">
                     <td>{!! $gp->id !!}</td>
                     <td>{!! $gp->title !!}</td>
-                    <td>{!! $gp->active == true ? 'SIM' : 'NÃO' !!}</td>
+                    <td>{!! $gp->active !!}</td>
                     <td style="display: flex;">
                         <a href="{{ route('grupo-portfolio.edit', $gp->id) }}" class="btn btn-info">Editar</a>
 

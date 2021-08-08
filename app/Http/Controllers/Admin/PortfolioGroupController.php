@@ -17,8 +17,7 @@ class PortfolioGroupController extends Controller
      */
     public function index()
     {
-
-        $portfoliosGroups = PortfolioGroup::where('active', true)->get();
+        $portfoliosGroups = PortfolioGroup::all();
 
         return view('admin.group-portfolio.index', compact('portfoliosGroups'));
     }
@@ -41,7 +40,6 @@ class PortfolioGroupController extends Controller
      */
     public function store(PortfolioGroupRequest $request)
     {
-
         $data = $request->all();
 
         if(!isset($data)) {

@@ -35,7 +35,7 @@ class PortfolioGroupRequest extends FormRequest
         $messages = [
             'title.required' => 'O título é obrigatório.',
             'title.string' => 'O título deve ser uma string.',
-            'title.max:100' => 'O valor máximo é de 100 caracteres.',
+            'title.max' => 'O valor máximo é de 100 caracteres.',
         ];
 
         return $messages;

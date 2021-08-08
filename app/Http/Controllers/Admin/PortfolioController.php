@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PortfolioRequest;
 use Illuminate\Http\Request;
+use App\Models\Portfolio;
 
 class PortfolioController extends Controller
 {
@@ -13,8 +15,10 @@ class PortfolioController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        return view('admin.portfolio.index');
+    {   
+        $portfolios = Portfolio::all();
+
+        return view('admin.portfolio.index', compact('portfolios'));
     }
 
     /**
@@ -24,7 +28,7 @@ class PortfolioController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.portfolio.create');
     }
 
     /**
@@ -33,9 +37,45 @@ class PortfolioController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PortfolioRequest $request)
     {
-        //
+        $data = $request->all();
+
+        if(!isset($data)) {
+
+            return redirect()
+                ->back()
+                ->withErrors($data);
+        } else {
+
+            try {
+
+                if($request->hasFile('image') && $request->file('image')) {
+
+                    $requestImage = $request->image;
+        
+                    $ext = $request->extension();
+        
+                    $imageName = md5($requestImage->getClientOriginalName.strtotime("now").".".$ext);
+        
+                    $requestImage->move(public_path('images/upload'), $imageName);
+        
+                    $data['image'] = $imageName;
+                }
+    
+                $data['active'] = $request->has('active');
+    
+                Portfolio::create($data);
+        
+                return redirect('painel/portfolio')->with('success', 'Portfólio criado com sucesso!');
+
+            } catch(\Exception $ex ) {
+
+                echo $ex->getMessage();
+
+                return redirect()->back();
+            }
+        }
     }
 
     /**

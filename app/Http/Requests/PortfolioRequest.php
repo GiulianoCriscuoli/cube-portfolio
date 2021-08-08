@@ -13,7 +13,7 @@ class PortfolioRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,9 +22,26 @@ class PortfolioRequest extends FormRequest
      * @return array
      */
     public function rules()
-    {
-        return [
-            //
+    {   
+        $rules = [
+            'title' => ['required', 'string'],
+            'image' => ['image'],
+            'short_description' => ['max:50'] 
         ];
+        
+        return $rules;
+    }
+
+    public function messages()
+    {
+
+        $messages = [
+            'title.required' => 'O campo de título é obrigatório',
+            'title.string' => 'O campo de título é uma string',
+            'image.image' => 'O arquivo deve ser uma imagem',
+            'short_description.max' => 'A descrição deve ter no máximo 50 caracteres'
+        ];
+
+        return $messages;
     }
 }
