@@ -30,7 +30,7 @@
             <div class="col-md-6" style="display: flex; justify-content: center; align-items:flex-end;">
                 <div class="form-group">
                     <label for="active">Ativo:</label>
-                    <input class="checkbox" value={{ @$portfolioGroup->active }} type="checkbox" name="active" id="active">
+                    <input class="checkbox" {{ !empty($portfolioGroup->active) ? 'checked="checked"' : '' }} type="checkbox" name="active" id="active">
                 </div>
             </div>
         </div>

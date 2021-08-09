@@ -86,7 +86,7 @@ class PortfolioGroupController extends Controller
      */
     public function edit($grupo_portfolio)
     {
-        $portfolioGroup = PortfolioGroup::findOrfail($grupo_portfolio)->first();
+        $portfolioGroup = PortfolioGroup::findOrfail($grupo_portfolio);
 
         return view('admin.group-portfolio.edit', compact('portfolioGroup'));
     }
@@ -105,6 +105,8 @@ class PortfolioGroupController extends Controller
         $portfolioGroup = PortfolioGroup::findOrfail($grupo_portfolio);
 
         if($portfolioGroup) {
+
+            $data['active'] = $request->has('active');
 
             $portfolioGroup->update($data);
 

@@ -30,14 +30,13 @@
     <tbody>
         @if ($portfoliosGroups)
             @foreach ($portfoliosGroups as $gp)
-                <tr style="background-color: {{  $gp->active == false ? '#990000;' : 'unset;' }}
+                <tr style="background-color: {{  $gp->active == false ? '#dc5454;' : 'unset;' }}
                     color: {{  $gp->active == false ? '#FFFFFF;' : '#000;' }} ">
                     <td>{!! $gp->id !!}</td>
                     <td>{!! $gp->title !!}</td>
-                    <td>{!! $gp->active !!}</td>
+                    <td>{!! $gp->active ? 'SIM' : 'NÃO' !!}</td>
                     <td style="display: flex;">
-                        <a href="{{ route('grupo-portfolio.edit', $gp->id) }}" class="btn btn-info">Editar</a>
-
+                        <a href="{{ route('grupo-portfolio.edit', $gp->id) }}" class="btn btn-info" style="margin-right: 5px;">Editar</a>
                         <form action="{{ route('grupo-portfolio.destroy', $gp->id) }}" method="POST">
                             @csrf
                             @method('delete')

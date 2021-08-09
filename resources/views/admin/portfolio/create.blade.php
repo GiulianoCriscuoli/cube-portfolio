@@ -8,7 +8,6 @@
 
 @section('content')
 
-
 <form action="{{ route('portfolio.store')}}" method="POST" enctype="multipart/form-data">
     @csrf
 

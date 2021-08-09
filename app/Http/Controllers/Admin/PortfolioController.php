@@ -49,25 +49,27 @@ class PortfolioController extends Controller
         } else {
 
             try {
-
-                if($request->hasFile('image') && $request->file('image')) {
-
+                
+                if($request->hasFile('image') && $request->file('image')->isValid()) {
+                    
                     $requestImage = $request->image;
         
-                    $ext = $request->extension();
+                    $ext = $requestImage->extension();
         
-                    $imageName = md5($requestImage->getClientOriginalName.strtotime("now").".".$ext);
-        
+                    $imageName = md5($requestImage->getClientOriginalName().strtotime("now").".".$ext);
+
                     $requestImage->move(public_path('images/upload'), $imageName);
-        
+
                     $data['image'] = $imageName;
+
                 }
     
                 $data['active'] = $request->has('active');
     
                 Portfolio::create($data);
         
-                return redirect('painel/portfolio')->with('success', 'Portfólio criado com sucesso!');
+                return redirect('painel/portfolio')
+                    ->with('success', 'Portfólio criado com sucesso!');
 
             } catch(\Exception $ex ) {
 
@@ -95,9 +97,14 @@ class PortfolioController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($portfolio)
     {
-        //
+        $portfolio = Portfolio::findOrFail($portfolio);
+
+        if($portfolio) {
+
+            return view('admin.portfolio.edit', compact('portfolio'));
+        }
     }
 
     /**
@@ -107,9 +114,33 @@ class PortfolioController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PortfolioRequest $request, $portfolio)
     {
-        //
+        $data = $request->all();
+
+        $portfolio = Portfolio::findOrFail($portfolio);
+        
+        if($portfolio) {
+            
+            if($request->hasFile('image') && $request->file('image')->isValid()) {
+                
+                $requestImage = $request->image;
+                
+                $ext = $requestImage->extension();
+                $imageName = md5($requestImage->getClientOriginalName().strtotime("now").".".$ext);
+                
+                $requestImage->move(public_path('images/upload'), $imageName);
+
+                $data['image'] = $imageName;
+            }
+
+            $data['active'] = $request->has('active');
+
+            $portfolio->update($data);
+
+            return redirect('painel/portfolio')
+                ->with('success', 'Portfólio editado com sucesso!');
+        }
     }
 
     /**
@@ -118,8 +149,15 @@ class PortfolioController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($portfolio)
     {
-        //
+        $portfolio = Portfolio::findOrFail($portfolio);
+
+        if($portfolio) {
+
+            $portfolio->delete($portfolio);
+
+            return redirect('painel/portfolio')->with('success', 'Portfólio excluído com sucesso!');
+        }
     }
 }
