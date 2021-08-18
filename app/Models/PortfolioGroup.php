@@ -9,11 +9,15 @@ use App\Models\Portfolio;
 class PortfolioGroup extends Model
 {
     use HasFactory;
-
     protected $table = 'groups_portfolios';
 
     protected $fillable = [
         'title',
         'active'
     ];
+
+    public function portfolios() {
+
+        return $this->belongsToMany(Portfolio::class);
+    }
 }

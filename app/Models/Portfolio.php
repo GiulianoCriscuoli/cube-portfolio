@@ -17,4 +17,9 @@ class Portfolio extends Model
         'url',
         'image'
     ];
+
+    public function portfoliosGroup() {
+
+        return $this->belongsToMany(PortfolioGroup::class, 'group_portfolio_portfolio', 'portfolio_id', 'group_portfolio_id');
+    }
 }

@@ -58,6 +58,18 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <h4>Grupos de portfólio</h4>
+                @foreach ($portfolioGroup as $key => $gp)
+                    <label for="portfolioGroup">{!! $gp !!}</label>
+                    <input type="checkbox" name="portfolioGroup[]" value="{{ $key }}"> <br>
+                @endforeach
+            </div>
+        </div>
+    </div>
+
     <div class="row pb-4">
         <div class="col-md-4">
             <div class="btn-area">
@@ -65,7 +77,6 @@
             </div>
         </div>
     </div>
-    
 </form>
 
 @endsection
