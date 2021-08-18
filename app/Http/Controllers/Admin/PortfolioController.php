@@ -6,6 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PortfolioRequest;
 use Illuminate\Http\Request;
 use App\Models\Portfolio;
+use App\Models\PortfolioGroup;
+use PHPUnit\TextUI\XmlConfiguration\Group;
+use Illuminate\Support\Facades\DB;
+
 
 class PortfolioController extends Controller
 {
@@ -28,7 +32,10 @@ class PortfolioController extends Controller
      */
     public function create()
     {
-        return view('admin.portfolio.create');
+
+        $portfolioGroup = PortfolioGroup::where('active', true)->pluck('title', 'id');
+
+        return view('admin.portfolio.create', compact('portfolioGroup'));
     }
 
     /**
@@ -39,7 +46,7 @@ class PortfolioController extends Controller
      */
     public function store(PortfolioRequest $request)
     {
-        $data = $request->all();
+        $data = request()->except('portfolioGroup');
 
         if(!isset($data)) {
 
@@ -65,8 +72,9 @@ class PortfolioController extends Controller
                 }
     
                 $data['active'] = $request->has('active');
-    
-                Portfolio::create($data);
+
+                $portfolio = Portfolio::create($data);
+                $portfolio->portfoliosGroup()->sync(request('portfolioGroup'));
         
                 return redirect('painel/portfolio')
                     ->with('success', 'Portfólio criado com sucesso!');
@@ -101,9 +109,14 @@ class PortfolioController extends Controller
     {
         $portfolio = Portfolio::findOrFail($portfolio);
 
+        $portfolioGroup = PortfolioGroup::where('active', true)->pluck('title', 'id');
+
         if($portfolio) {
 
-            return view('admin.portfolio.edit', compact('portfolio'));
+            return view('admin.portfolio.edit', compact([
+                'portfolio',
+                'portfolioGroup'
+            ]));
         }
     }
 
