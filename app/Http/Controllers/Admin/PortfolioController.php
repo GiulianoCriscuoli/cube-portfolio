@@ -68,7 +68,6 @@ class PortfolioController extends Controller
                     $requestImage->move(public_path('images/upload'), $imageName);
 
                     $data['image'] = $imageName;
-
                 }
     
                 $data['active'] = $request->has('active');
@@ -129,7 +128,7 @@ class PortfolioController extends Controller
      */
     public function update(PortfolioRequest $request, $portfolio)
     {
-        $data = $request->all();
+        $data = request()->except('portfolioGroup');
 
         $portfolio = Portfolio::findOrFail($portfolio);
         
@@ -150,6 +149,7 @@ class PortfolioController extends Controller
             $data['active'] = $request->has('active');
 
             $portfolio->update($data);
+            $portfolio->portfoliosGroup()->sync(request('portfolioGroup'));
 
             return redirect('painel/portfolio')
                 ->with('success', 'Portfólio editado com sucesso!');

@@ -65,7 +65,7 @@
                 <h4>Grupo de portfólios</h4>
                 @foreach($portfolioGroup as $key => $gp)
                     <label for="portfolioGroup">{!! $gp !!}</label>
-                    <input type="checkbox" name="portfolioGroup" value="{{ @$key }}"><br>
+                    <input type="checkbox" name="portfolioGroup[]" {{ $key ? 'checked="checked"' : '' }} value="{{ @$key }}"><br>
                 @endforeach
             </div>
         </div>

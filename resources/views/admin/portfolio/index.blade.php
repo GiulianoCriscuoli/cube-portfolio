@@ -38,7 +38,9 @@
                      <form action="{{ route('portfolio.destroy', $portfolio->id) }}" method="POST">
                         @csrf
                         @method('delete')
-                        <button type="submit" class="btn btn-danger">Excluir</button>
+                        @if($portfolio->portfoliosGroup->isEmpty())
+                            <button type="submit" class="btn btn-danger">Excluir</button>
+                        @endif
                     </form>   
                 </td>   
             </tr>            
