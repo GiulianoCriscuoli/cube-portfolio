@@ -6,3 +6,57 @@ h1 {
   color: #FF0000;
 }
 
+* {
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.list-groupPortfolio {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.list-groupPortfolio .groupPortfolio {
+  background-color: #14a8b3;
+  color: #FFF;
+  margin: 10px;
+  padding: 8px;
+  text-transform: uppercase;
+  font-weight: 600;
+  max-width: 100%;
+  width: 100px;
+  cursor: pointer;
+  text-align: center;
+}
+.list-groupPortfolio .groupPortfolio.active {
+  background-color: #d63939;
+}
+
+.row-portfolio {
+  flex-wrap: wrap;
+}
+.row-portfolio img {
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.portfolio-area {
+  width: 200px;
+  margin: 20px 0;
+}
+
+@media (max-width: 767px) {
+  .list-groupPortfolio {
+    flex-direction: column;
+  }
+
+  .row-portfolio {
+    justify-content: center;
+  }
+}
+

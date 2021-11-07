@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use App\Models\User;
 use Illuminate\Validation\Rules\Password;
 
 class LoginController extends Controller
@@ -35,11 +36,22 @@ class LoginController extends Controller
 
         if(!Auth::attempt($data)) { 
 
-            $validator->errors()->add('password', 'Preencha os dados corretamente');
+            
+            if(!Auth::id()) {
+                
+                $validator->errors()->add('email', 'Não existe email para este usuário');
+                $validator->errors()->add('password', 'A senha não foi compatível');
+
+                return redirect()
+                       ->back()
+                       ->withInput()
+                       ->withErrors($validator);
+            }
 
             return redirect()
                    ->back()
-                   ->witErrors($validator);
+                   ->withInput()
+                   ->withErrors($validator);
         } else {
 
             return redirect()->route('panel.index');
@@ -48,9 +60,17 @@ class LoginController extends Controller
 
     public function logout() {
 
-        Auth::logout();
+        $userId = User::where('id', Auth::id())->first();
 
-        return redirect()->route('login');
+        if($userId) {
+
+            Auth::logout();
+            return redirect()->route('login');
+        } else {
+
+            return redirect()->back();
+        }
+
     }
 
     protected function validator(Array $data)
@@ -58,6 +78,11 @@ class LoginController extends Controller
         return Validator::make($data, [
             'email' => ['required', 'email', 'required', 'string'],
             'password' => ['required', 'string', Password::defaults()]
+        ],
+        [
+           'password.required' => 'Campo senha é obrigatório',
+           'email.required' => 'Campo email é obrigatório',
+           'email.email' => 'O Campo de email está no formato incorreto'
         ]);
     }
 }
